@@ -30,27 +30,25 @@ def validation_exception_handler(request, err):
 @app.post('/add_address', tags=["Address"],response_model=schemas.Address,status_code=201)
 async def create_item(address_request: schemas.AddCreate, db: Session = Depends(get_db)):
     """
-    Create an Item and store it in the database
+    Create an Address and store it in the database
     """
-    
-    # update_item_encoded = jsonable_encoder(address_request)
-    # address_loc = update_item_encoded['address']
-
-    # print(geolocator.geocode(address_loc[:]).point)
-    # # address_request.address_point = geolocator.geocode(address)
 
     return await AddressRepo.create(db=db, address=address_request)
 
 
 @app.get('/get-add', tags=["Address"], status_code=201)
-async def get_all(db: Session = Depends(get_db)):
+async def get_all(db: Session = Depends(get_db)): 
+     """
+    To get list of all Addresses in database
+    """
+        
     addList = db.query(models.Address).all()
     return addList
 
 @app.put('/update-add/{add_id}', tags=["Address"],response_model=schemas.Address)
 async def update_item(add_id: int,address_request: schemas.Address, db: Session = Depends(get_db)):
     """
-    Update an Item stored in the database
+    Update an Address stored in the database
     """
     db_item = AddressRepo.fetch_by_id(db, add_id)
     if db_item:
